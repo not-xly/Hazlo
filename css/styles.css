@@ -1,0 +1,347 @@
+:root {
+    --bg-color: #f2f2f7;
+    --card-bg: #ffffff;
+    --field-bg: #fafafa;
+    --action-bg: #e9e9ef;
+    --primary: #007aff;
+    --danger: #ff3b30;
+    --text-main: #1c1c1e;
+    --text-muted: #8e8e93;
+    --border: #e5e5ea;
+    --badge-corto-bg: #e4f2ff;
+    --badge-corto-fg: #007aff;
+    --badge-medio-bg: #fff2e0;
+    --badge-medio-fg: #ff9500;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #000000;
+        --card-bg: #1c1c1e;
+        --field-bg: #2c2c2e;
+        --action-bg: #2c2c2e;
+        --primary: #0a84ff;
+        --danger: #ff453a;
+        --text-main: #ffffff;
+        --text-muted: #8e8e93;
+        --border: #38383a;
+        --badge-corto-bg: rgba(10, 132, 255, 0.2);
+        --badge-corto-fg: #0a84ff;
+        --badge-medio-bg: rgba(255, 159, 10, 0.2);
+        --badge-medio-fg: #ff9f0a;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--bg-color);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Respeta el notch y la barra de inicio del iPhone */
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    display: flex;
+    justify-content: center;
+}
+
+/* iPhone 15: 393 px de ancho */
+.app-container {
+    width: 100%;
+    max-width: 393px;
+}
+
+/* Cabecera */
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-icon {
+    background: linear-gradient(135deg, #007aff, #5856d6);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+}
+
+h1 span {
+    color: var(--primary);
+}
+
+/* Formulario */
+.task-form {
+    background: var(--card-bg);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+}
+
+.input-row {
+    display: flex;
+    gap: 6px;
+}
+
+/* 16px evita que iOS haga zoom al enfocar el campo */
+input[type="text"], .edit-input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: var(--field-bg);
+    color: var(--text-main);
+}
+
+select {
+    padding: 8px 6px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--field-bg);
+    outline: none;
+    color: var(--text-main);
+}
+
+.btn-add {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-add svg {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-add:active {
+    opacity: 0.7;
+}
+
+/* Filtro Todos / Corto / Medio */
+.segmented {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    background: var(--action-bg);
+    border-radius: 9px;
+    margin-bottom: 10px;
+}
+
+.segmented button {
+    flex: 1;
+    height: 30px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.segmented button.active {
+    background: var(--card-bg);
+    color: var(--text-main);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+/* Lista de tareas: filas compactas */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+}
+
+.task-item {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: transform 0.15s ease;
+}
+
+.task-item.dragging {
+    position: relative;
+    z-index: 10;
+    transition: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding-left: 10px;
+}
+
+.task-badge {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+}
+
+.badge-corto { background-color: var(--badge-corto-bg); color: var(--badge-corto-fg); }
+.badge-medio { background-color: var(--badge-medio-bg); color: var(--badge-medio-fg); }
+
+/* Una línea; al expandir la tarea se ve completa */
+.task-text {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 0;
+    font-size: 15px;
+    line-height: 20px;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.task-item.expanded .task-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+/* Asa de arrastre: touch-action evita que el dedo haga scroll mientras arrastras */
+.drag-handle {
+    flex: 0 0 36px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    touch-action: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+}
+
+.drag-handle svg {
+    width: 18px;
+    height: 18px;
+}
+
+body.is-dragging,
+body.is-dragging * {
+    cursor: grabbing;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Acciones: solo visibles con la tarea expandida */
+.task-actions {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 10px 10px 42px;
+}
+
+.task-item.expanded .task-actions {
+    display: flex;
+}
+
+.chip {
+    height: 32px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 8px;
+    background: var(--action-bg);
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.chip svg {
+    width: 14px;
+    height: 14px;
+}
+
+.chip:active {
+    background: var(--border);
+}
+
+.chip.danger {
+    color: var(--danger);
+}
+
+.edit-input {
+    width: 100%;
+    margin: 6px 0;
+    padding: 6px 8px;
+    line-height: 20px;
+    resize: none;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--primary);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 15px;
+    padding: 32px 0;
+    list-style: none;
+}

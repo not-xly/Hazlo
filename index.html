@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f2f2f7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HazLo">
+    <title>HazLo - Lista de Tareas</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="app-brand">
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1.5 13l4.5 4.5L14 7M9.5 13l4.5 4.5L22.5 7"/>
+                    </svg>
+                </div>
+                <h1>Haz<span>Lo</span></h1>
+            </div>
+        </header>
+
+        <form class="task-form" id="todoForm">
+            <div class="input-row">
+                <input type="text" id="taskInput" placeholder="Nueva tarea..." autocomplete="off" enterkeyhint="done" required>
+                <select id="deadlineInput" aria-label="Plazo">
+                    <option value="corto">Corto</option>
+                    <option value="medio">Medio</option>
+                </select>
+                <button type="submit" class="btn-add" aria-label="Agregar tarea">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <div class="segmented" id="filterControl" role="group" aria-label="Filtrar por plazo">
+            <button type="button" data-filter="todos" class="active" aria-pressed="true">Todos</button>
+            <button type="button" data-filter="corto" aria-pressed="false">Corto</button>
+            <button type="button" data-filter="medio" aria-pressed="false">Medio</button>
+        </div>
+
+        <ul class="task-list" id="taskList"></ul>
+    </div>
+
+    <script src="js/tasks.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
