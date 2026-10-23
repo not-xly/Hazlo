@@ -9,8 +9,9 @@ const ICONS = {
     trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'
 };
 
-const DEADLINE_LABELS = { corto: 'Corto', medio: 'Medio' };
-const OTHER_DEADLINE = { corto: 'medio', medio: 'corto' };
+// Plazos: corto, medio y viajes (la letra del badge sale de la primera letra: C, M, V)
+const DEADLINE_LABELS = { corto: 'Corto', medio: 'Medio', viaje: 'Viajes' };
+const NEXT_DEADLINE = { corto: 'medio', medio: 'viaje', viaje: 'corto' };
 
 const EXPAND_DELAY = 250;   // ms para distinguir un toque simple de un doble toque
 const EDGE_ZONE = 80;       // px cerca del borde donde se desplaza la lista al arrastrar
@@ -58,12 +59,12 @@ function createTaskItem(task) {
     const row = document.createElement('div');
     row.className = 'task-row';
 
-    const otherLabel = DEADLINE_LABELS[OTHER_DEADLINE[task.deadline]];
+    // Tocar la letra pasa al siguiente plazo: Corto -> Medio -> Viajes -> Corto
     const badge = document.createElement('button');
     badge.type = 'button';
     badge.className = `task-badge badge-${task.deadline}`;
-    badge.dataset.action = 'toggle-deadline';
-    badge.setAttribute('aria-label', `Pasar a ${otherLabel}`);
+    badge.dataset.action = 'cycle-deadline';
+    badge.setAttribute('aria-label', `Cambiar a ${DEADLINE_LABELS[NEXT_DEADLINE[task.deadline]]}`);
     badge.textContent = task.deadline.charAt(0).toUpperCase();
 
     const text = document.createElement('div');
@@ -77,11 +78,18 @@ function createTaskItem(task) {
 
     row.append(badge, text, handle);
 
+    // Botones para elegir directamente cualquiera de los otros plazos
     const actions = document.createElement('div');
     actions.className = 'task-actions';
+    Object.keys(DEADLINE_LABELS)
+        .filter(deadline => deadline !== task.deadline)
+        .forEach(deadline => {
+            const button = createActionButton('set-deadline', `Pasar a ${DEADLINE_LABELS[deadline]}`, 'swap');
+            button.dataset.deadline = deadline;
+            actions.appendChild(button);
+        });
     actions.append(
         createActionButton('edit', 'Editar', 'edit'),
-        createActionButton('toggle-deadline', `Pasar a ${otherLabel}`, 'swap'),
         createActionButton('delete', 'Borrar', 'trash', 'danger')
     );
 
@@ -112,7 +120,8 @@ function syncFilterButtons() {
     });
 }
 
-function handleAction(action, item) {
+function handleAction(button, item) {
+    const action = button.dataset.action;
     const id = Number(item.dataset.id);
 
     if (action === 'edit') {
@@ -122,9 +131,11 @@ function handleAction(action, item) {
 
     if (action === 'delete') deleteTask(id);
 
-    if (action === 'toggle-deadline') {
+    if (action === 'set-deadline') setTaskDeadline(id, button.dataset.deadline);
+
+    if (action === 'cycle-deadline') {
         const task = tasks.find(t => t.id === id);
-        if (task) setTaskDeadline(id, OTHER_DEADLINE[task.deadline]);
+        if (task) setTaskDeadline(id, NEXT_DEADLINE[task.deadline]);
     }
 
     renderTasks();
@@ -317,7 +328,7 @@ listElement.addEventListener('click', (event) => {
 
     const button = event.target.closest('button[data-action]');
     if (button) {
-        handleAction(button.dataset.action, item);
+        handleAction(button, item);
         return;
     }
 
